@@ -13,6 +13,7 @@ function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [backgroundImage, setBackgroundImage] = useState(''); 
   const [cityImage, setCityImage] = useState('');
+  const [airQuality, setAirQuality] = useState(null);
 
   const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
   const UNSPLASH_API_KEY = process.env.REACT_APP_UNSPLASH_API_KEY;
@@ -116,6 +117,31 @@ function App() {
     }
   }, [weather, fetchCityImage]);
 
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        const { latitude, longitude } = position.coords;
+        fetchWeatherByCoordinates(latitude, longitude);
+      }, error => {
+        console.error('Error fetching geolocation:', error);
+      });
+    }
+  }, []);
+
+  const fetchWeatherByCoordinates = async (lat, lon) => {
+    setLoading(true);
+    setError('');
+    try {
+      const weatherResponse = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`);
+      setWeather(weatherResponse.data);
+      addToRecentSearches(weatherResponse.data.name);
+    } catch (err) {
+      setError('Unable to fetch weather data. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fetchWeatherData = async (cityName) => {
     if (!cityName) return;
     
@@ -166,6 +192,32 @@ function App() {
     acc[date].push(item);
     return acc;
   }, {});
+
+  const fetchAirQualityData = async (lat, lon) => {
+    try {
+      const response = await axios.get(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${API_KEY}`);
+      setAirQuality(response.data.list[0]);
+    } catch (err) {
+      console.error('Error fetching air quality data:', err);
+    }
+  };
+
+  useEffect(() => {
+    if (weather) {
+      fetchAirQualityData(weather.coord.lat, weather.coord.lon);
+    }
+  }, [weather]);
+
+  const getAQIColor = (aqi) => {
+    switch (aqi) {
+      case 1: return 'bg-green-500'; // Good
+      case 2: return 'bg-yellow-500'; // Moderate
+      case 3: return 'bg-orange-500'; // Unhealthy for Sensitive Groups
+      case 4: return 'bg-red-500'; // Unhealthy
+      case 5: return 'bg-purple-500'; // Very Unhealthy
+      default: return 'bg-gray-500';
+    }
+  };
 
   return (
     <div className={`min-h-screen transition-colors duration-500 relative overflow-hidden ${darkMode ? 'bg-gray-900 text-white' : 'bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600'}`}>
@@ -304,6 +356,7 @@ function App() {
                           day: 'numeric' 
                         })}
                       </p>
+                      <p className="text-lg text-gray-300 mt-2">Your Current Location Weather</p>
                     </div>
                     <motion.button
                       whileHover={{ rotate: 180 }}
