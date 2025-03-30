@@ -11,7 +11,7 @@ function App() {
   const [error, setError] = useState('');
   const [recentSearches, setRecentSearches] = useState([]);
   const [darkMode, setDarkMode] = useState(false);
-  const [backgroundImage, setBackgroundImage] = useState('');
+  const [backgroundImage, setBackgroundImage] = useState(''); 
   const [cityImage, setCityImage] = useState('');
 
   const API_KEY = process.env.REACT_APP_WEATHER_API_KEY || 'YOUR_API_KEY';
@@ -85,7 +85,7 @@ function App() {
       console.error('Error fetching city image:', error);
       setCityImage(null);
     }
-  }, []);
+  }, [UNSPLASH_API_KEY]);
 
   // Update background image when weather changes
   useEffect(() => {
