@@ -1,38 +1,184 @@
-.App {
-  text-align: center;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+@layer base {
+  body {
+    @apply m-0 p-0 font-sans antialiased;
   }
 }
 
-.App-header {
-  background-color: #282c34;
+@layer components {
+  .weather-card {
+    @apply animate-fade-in;
+  }
+}
+
+/* Custom background pattern */
+.bg-grid-pattern {
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Glass morphism effect */
+.glass {
+  @apply bg-white/10 backdrop-blur-md border border-white/10;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-white/20 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-white/30;
+}
+
+/* Custom animations */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Gradient text */
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500;
+}
+
+/* Card hover effects */
+.hover-card {
+  @apply transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+}
+
+/* Custom focus styles */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50;
+}
+
+/* Image styles */
+.weather-icon {
+  @apply w-24 h-24 drop-shadow-2xl transition-transform duration-300;
+}
+
+.weather-icon:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Background image styles */
+.background-image {
+  @apply absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-500;
+}
+
+/* Glass card styles */
+.glass-card {
+  @apply bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl shadow-xl;
+}
+
+/* Weather detail card */
+.weather-detail {
+  @apply bg-white/10 backdrop-blur-sm rounded-xl p-4 transition-all duration-300 hover:bg-white/20;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #00b4db, #0083b0);
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.App {
+  padding: 20px;
+}
+
+.MuiCard-root {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.MuiButton-contained {
+  background: linear-gradient(45deg, #2196f3 30%, #21cbf3 90%);
+  border: 0;
   color: white;
+  height: 48;
+  padding: 0 30px;
+  box-shadow: 0 3px 5px 2px rgba(33, 203, 243, .3);
 }
 
-.App-link {
-  color: #61dafb;
+.MuiButton-contained:hover {
+  background: linear-gradient(45deg, #1976d2 30%, #1cb5e0 90%);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.MuiTextField-root {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+}
+
+.MuiTypography-h3 {
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.MuiTypography-h4 {
+  color: #1976d2;
+}
+
+.MuiTypography-h2 {
+  color: #2196f3;
+  font-weight: bold;
+}
+
+.background-container {
+  height: 100%;
+  width: 100%;
+  background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+p {
+  color: #666;
+  font-size: 1.2rem;
 }
