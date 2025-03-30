@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import './App.css';
@@ -70,28 +70,22 @@ function App() {
   };
 
   // Function to fetch city landmark image
-  const fetchCityImage = async (cityName) => {
+  const fetchCityImage = useCallback(async (cityName) => {
     try {
       const response = await axios.get(
-        `https://api.unsplash.com/search/photos?query=${cityName} landmark&orientation=landscape&per_page=1`,
+        `https://api.unsplash.com/photos/random?query=${cityName} city landmark&orientation=landscape`,
         {
           headers: {
-            'Authorization': `Client-ID ${UNSPLASH_API_KEY}`
+            Authorization: `Client-ID ${UNSPLASH_API_KEY}`
           }
         }
       );
-      
-      if (response.data.results.length > 0) {
-        setCityImage(response.data.results[0].urls.regular);
-      } else {
-        // Fallback to a default city image if no results found
-        setCityImage('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
-      }
+      setCityImage(response.data.urls.regular);
     } catch (error) {
       console.error('Error fetching city image:', error);
-      setCityImage('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+      setCityImage(null);
     }
-  };
+  }, []);
 
   // Update background image when weather changes
   useEffect(() => {
@@ -106,7 +100,7 @@ function App() {
     if (weather?.name) {
       fetchCityImage(weather.name);
     }
-  }, [weather]);
+  }, [weather, fetchCityImage]);
 
   const fetchWeatherData = async (cityName) => {
     if (!cityName) return;
