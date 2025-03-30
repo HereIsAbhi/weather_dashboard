@@ -71,6 +71,8 @@ function App() {
 
   // Function to fetch city landmark image
   const fetchCityImage = useCallback(async (cityName) => {
+    if (!UNSPLASH_API_KEY) return;
+    
     try {
       const response = await axios.get(
         `https://api.unsplash.com/photos/random?query=${cityName} city landmark&orientation=landscape`,
