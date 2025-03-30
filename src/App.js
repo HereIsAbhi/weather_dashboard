@@ -14,8 +14,14 @@ function App() {
   const [backgroundImage, setBackgroundImage] = useState(''); 
   const [cityImage, setCityImage] = useState('');
 
-  const API_KEY = process.env.REACT_APP_WEATHER_API_KEY || 'YOUR_API_KEY';
-  const UNSPLASH_API_KEY = process.env.REACT_APP_UNSPLASH_API_KEY || 'YOUR_UNSPLASH_API_KEY';
+  const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
+  const UNSPLASH_API_KEY = process.env.REACT_APP_UNSPLASH_API_KEY;
+
+  useEffect(() => {
+    // Debug logging
+    console.log('Weather API Key:', API_KEY ? 'Present' : 'Missing');
+    console.log('Unsplash API Key:', UNSPLASH_API_KEY ? 'Present' : 'Missing');
+  }, [API_KEY, UNSPLASH_API_KEY]);
 
   useEffect(() => {
     // Load recent searches from localStorage
