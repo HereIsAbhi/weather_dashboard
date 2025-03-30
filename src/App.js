@@ -52,8 +52,14 @@ function App() {
     }
   }, [darkMode]);
 
+  const clearRecentSearches = () => {
+    setRecentSearches([]);
+    localStorage.setItem('recentSearches', JSON.stringify([]));
+  };
+
   const addToRecentSearches = (cityName) => {
     setRecentSearches(prev => {
+      if (prev[0] === cityName) return prev; // Prevent duplicate entry
       const filtered = prev.filter(item => item !== cityName);
       return [cityName, ...filtered].slice(0, 5);
     });
@@ -402,7 +408,10 @@ function App() {
               transition={{ delay: 0.4 }}
               className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-2xl border border-white/10"
             >
-              <h3 className="text-xl font-semibold mb-4 text-white">Recent Searches</h3>
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-semibold text-white">Recent Searches</h3>
+                <button onClick={clearRecentSearches} className="px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors">Clear</button>
+              </div>
               <div className="space-y-3">
                 {recentSearches.map((searchedCity, index) => (
                   <motion.button
